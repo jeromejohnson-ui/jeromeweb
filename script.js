@@ -1,5 +1,5 @@
-const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
-const SUPABASE_KEY = "YOUR_ANON_PUBLIC_KEY";
+const SUPABASE_URL = "https://goupceptsijattqsqxma.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdvdXBjZXB0c2lqYXR0cXNxeG1hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMTEwOTMsImV4cCI6MjA4NzU4NzA5M30.g816kRFiFBdeDmz65JRBO6R4dMghF6VffaYbEX0Kb8M";
 
 const supabase = window.supabase.createClient(
     SUPABASE_URL,
@@ -37,4 +37,5 @@ form.addEventListener("submit", async function (event) {
         response.textContent = "Feedback sent successfully!";
         form.reset();
     }
+
 });
