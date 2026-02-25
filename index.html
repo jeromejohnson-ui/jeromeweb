@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jerome Johnson | Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <h2 class="logo">Jerome Johnson</h2>
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#feedback">Feedback</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero / About Section -->
+    <section id="about" class="hero">
+        <h1>Hello, I'm Jerome 👋</h1>
+        <p>
+            A passionate Web Developer skilled in HTML, CSS,
+            JavaScript, Node.js & Supabase.
+        </p>
+        <a href="#feedback" class="btn">Send Feedback</a>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <h2>Contact Me</h2>
+        <p>Email: jerome@email.com</p>
+        <p>Phone: +91 9876543210</p>
+    </section>
+
+    <!-- Feedback Section -->
+    <section id="feedback" class="section">
+        <h2>Send Your Feedback</h2>
+
+        <form id="feedbackForm" class="card">
+            <input type="text" id="name" placeholder="Your Name">
+            <textarea id="message" placeholder="Your Feedback"></textarea>
+            <button type="submit">Submit</button>
+        </form>
+
+        <p id="response"></p>
+    </section>
+
+    <footer>
+        <p>© 2026 Jerome Johnson | All Rights Reserved</p>
+    </footer>
+
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>
