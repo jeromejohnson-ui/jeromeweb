@@ -134,42 +134,60 @@
         }
 
         /* =========================
-           CARD / FORM
+           FEEDBACK (NEW DESIGN)
         ========================= */
-        .card {
-            margin-top: 30px;
-            padding: 30px;
-            background: #111;
-            border-radius: 15px;
-            display: inline-block;
-            color: white;
-            box-shadow: 0 10px 25px rgba(255, 0, 0, 0.3);
+        #feedback{
+            background:#111;
         }
 
-        input, textarea {
-            width: 280px;
-            padding: 12px;
-            margin: 10px 0;
-            border-radius: 8px;
-            border: 1px solid #444;
-            background: #1a1a1a;
-            color: white;
+        .feedback-form{
+            max-width:500px;
+            margin:30px auto 0;
         }
 
-        textarea {
-            height: 100px;
-            resize: none;
+        .feedback-form input, 
+        .feedback-form textarea{
+            width:100%;
+            padding:12px;
+            margin:10px 0;
+            background:#222;
+            border:1px solid #333;
+            border-radius:8px;
+            color:white;
+            font-size:14px;
+            transition:0.3s;
         }
 
-        input:focus, textarea:focus {
-            border-color: #ff2e2e;
-            box-shadow: 0 0 8px rgba(255, 46, 46, 0.4);
-            outline: none;
+        .feedback-form input:focus, 
+        .feedback-form textarea:focus{
+            outline:none;
+            border-color:#00ffd5;
+            box-shadow:0 0 10px rgba(0,255,213,0.2);
         }
 
-        #response {
-            margin-top: 15px;
-            font-weight: bold;
+        .feedback-form button{
+            width:100%;
+            padding:12px;
+            background:#00ffd5;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            font-weight:600;
+            color:#000;
+            font-size:16px;
+            transition:0.3s;
+        }
+
+        .feedback-form button:hover{
+            background:#00e6c3;
+            transform:translateY(-2px);
+            box-shadow:0 5px 15px rgba(0,255,213,0.4);
+        }
+
+        #status{
+            margin-top:15px;
+            font-size:14px;
+            font-weight:600;
         }
 
         footer {
@@ -194,10 +212,6 @@
 
             .section {
                 margin: 20px;
-            }
-
-            input, textarea {
-                width: 90%;
             }
         }
     </style>
@@ -235,13 +249,13 @@
     <section id="feedback" class="section">
         <h2>Send Your Feedback</h2>
 
-        <form id="feedbackForm" class="card">
+        <form id="feedbackForm" class="feedback-form">
             <input type="text" id="name" placeholder="Your Name" required>
             <textarea id="message" placeholder="Your Feedback" required></textarea>
             <button type="submit">Submit</button>
         </form>
 
-        <p id="response"></p>
+        <p id="status"></p>
     </section>
 
     <footer>
@@ -261,7 +275,7 @@
         );
 
         const form = document.getElementById("feedbackForm");
-        const response = document.getElementById("response");
+        const statusText = document.getElementById("status");
 
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
@@ -270,25 +284,25 @@
             const message = document.getElementById("message").value.trim();
 
             if (!name || !message) {
-                response.style.color = "red";
-                response.textContent = "Please fill all fields!";
+                statusText.style.color = "red";
+                statusText.textContent = "Please fill all fields!";
                 return;
             }
 
-            response.style.color = "white";
-            response.textContent = "Sending...";
+            statusText.style.color = "white";
+            statusText.textContent = "Sending...";
 
             const { error } = await supabase
                 .from("feedback")
                 .insert([{ name, message }]);
 
             if (error) {
-                response.style.color = "red";
-                response.textContent = "Error sending feedback!";
+                statusText.style.color = "red";
+                statusText.textContent = "Error sending feedback!";
                 console.error(error);
             } else {
-                response.style.color = "lightgreen";
-                response.textContent = "Feedback sent successfully!";
+                statusText.style.color = "lightgreen";
+                statusText.textContent = "Feedback sent successfully!";
                 form.reset();
             }
         });
@@ -296,4 +310,3 @@
 
 </body>
 </html>
-
