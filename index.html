@@ -134,60 +134,60 @@
         }
 
         /* =========================
-           FEEDBACK (NEW DESIGN)
+           FEEDBACK
         ========================= */
-        #feedback{
-            background:#111;
+        #feedback {
+            background: #111;
         }
 
-        .feedback-form{
-            max-width:500px;
-            margin:30px auto 0;
+        .feedback-form {
+            max-width: 500px;
+            margin: 30px auto 0;
         }
 
-        .feedback-form input, 
-        .feedback-form textarea{
-            width:100%;
-            padding:12px;
-            margin:10px 0;
-            background:#222;
-            border:1px solid #333;
-            border-radius:8px;
-            color:white;
-            font-size:14px;
-            transition:0.3s;
+        .feedback-form input,
+        .feedback-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #222;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            transition: 0.3s;
         }
 
-        .feedback-form input:focus, 
-        .feedback-form textarea:focus{
-            outline:none;
-            border-color:#00ffd5;
-            box-shadow:0 0 10px rgba(0,255,213,0.2);
+        .feedback-form input:focus,
+        .feedback-form textarea:focus {
+            outline: none;
+            border-color: #00ffd5;
+            box-shadow: 0 0 10px rgba(0, 255, 213, 0.2);
         }
 
-        .feedback-form button{
-            width:100%;
-            padding:12px;
-            background:#00ffd5;
-            border:none;
-            border-radius:8px;
-            cursor:pointer;
-            font-weight:600;
-            color:#000;
-            font-size:16px;
-            transition:0.3s;
+        .feedback-form button {
+            width: 100%;
+            padding: 12px;
+            background: #00ffd5;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #000;
+            font-size: 16px;
+            transition: 0.3s;
         }
 
-        .feedback-form button:hover{
-            background:#00e6c3;
-            transform:translateY(-2px);
-            box-shadow:0 5px 15px rgba(0,255,213,0.4);
+        .feedback-form button:hover {
+            background: #00e6c3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 213, 0.4);
         }
 
-        #status{
-            margin-top:15px;
-            font-size:14px;
-            font-weight:600;
+        #status {
+            margin-top: 15px;
+            font-size: 14px;
+            font-weight: 600;
         }
 
         footer {
@@ -251,8 +251,9 @@
 
         <form id="feedbackForm" class="feedback-form">
             <input type="text" id="name" placeholder="Your Name" required>
+            <input type="email" id="email" placeholder="Your Email" required>
             <textarea id="message" placeholder="Your Feedback" required></textarea>
-            <button type="submit">Submit</button>
+            <button type="submit">Submit Feedback</button>
         </form>
 
         <p id="status"></p>
@@ -266,44 +267,53 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script>
-        const SUPABASE_URL = "https://irnqodbrxwovjprqeyco.supabase.co";
-        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlybnFvZGJyeHdvdmpwcnFleWNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwODg0NjksImV4cCI6MjA4NzY2NDQ2OX0.XuEuqpP5Akz5RlD_8Suc1dgiJ8tHlXCsYmLrhPKCSbk";
+        const supabaseUrl = "https://cymbgtvahvkaktrcjbrx.supabase.co";
+        const supabaseKey = "c"; // ⚠️ replace with your real anon public key
 
-        const supabase = window.supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_KEY
+        const supabaseClient = supabase.createClient(
+            supabaseUrl,
+            supabaseKey
         );
 
-        const form = document.getElementById("feedbackForm");
-        const statusText = document.getElementById("status");
-
-        form.addEventListener("submit", async (e) => {
+        document.getElementById("feedbackForm").addEventListener("submit", async (e) => {
             e.preventDefault();
 
+            const status = document.getElementById("status");
+            const submitButton = e.target.querySelector('button[type="submit"]');
+
+            status.innerText = "Submitting...";
+            status.style.color = "#fff";
+            submitButton.disabled = true;
+            submitButton.innerText = "Submitting...";
+
             const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
             const message = document.getElementById("message").value.trim();
 
-            if (!name || !message) {
-                statusText.style.color = "red";
-                statusText.textContent = "Please fill all fields!";
-                return;
-            }
+            try {
+                const { error } = await supabaseClient
+                    .from("feedback")
+                    .insert([{ name, email, message }]);
 
-            statusText.style.color = "white";
-            statusText.textContent = "Sending...";
+                if (error) {
+                    status.innerText = `❌ Error: ${error.message}`;
+                    status.style.color = "#ff4444";
+                } else {
+                    status.innerText = "✅ Feedback submitted successfully!";
+                    status.style.color = "#00ffd5";
+                    e.target.reset();
 
-            const { error } = await supabase
-                .from("feedback")
-                .insert([{ name, message }]);
-
-            if (error) {
-                statusText.style.color = "red";
-                statusText.textContent = "Error sending feedback!";
-                console.error(error);
-            } else {
-                statusText.style.color = "lightgreen";
-                statusText.textContent = "Feedback sent successfully!";
-                form.reset();
+                    setTimeout(() => {
+                        status.innerText = "";
+                    }, 5000);
+                }
+            } catch (err) {
+                status.innerText = "❌ Unexpected error occurred.";
+                status.style.color = "#ff4444";
+                console.error(err);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.innerText = "Submit Feedback";
             }
         });
     </script>
