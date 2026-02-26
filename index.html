@@ -1,323 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Jerome Johnson | Portfolio</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Jerome | Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <style>
-        /* =========================
-           RESET & BASE
-        ========================= */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
-        }
+<style>
+:root{
+  --primary:#14b8a6;   /* teal */
+  --secondary:#f97316; /* orange */
+  --accent:#22d3ee;    /* cyan */
+  --dark:#020617;
+  --light:#ecfeff;
+}
 
-        body {
-            scroll-behavior: smooth;
-            background: linear-gradient(135deg, #000000, #1a0000);
-            color: #eaeaea;
-        }
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:'Poppins',sans-serif
+}
 
-        /* =========================
-           NAVIGATION
-        ========================= */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 60px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-        }
+body{
+  background:linear-gradient(135deg,#020617,#042f2e);
+  color:white
+}
 
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
+header{
+  padding:60px 20px;
+  text-align:center
+}
 
-        nav ul li {
-            margin-left: 25px;
-        }
+header h1{
+  font-size:3rem;
+  background:linear-gradient(45deg,var(--primary),var(--secondary));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent
+}
 
-        nav ul li a {
-            text-decoration: none;
-            color: white;
-            font-weight: 500;
-            position: relative;
-            transition: 0.3s;
-        }
+header p{
+  margin-top:10px;
+  opacity:.85
+}
 
-        nav ul li a::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: -5px;
-            width: 0;
-            height: 2px;
-            background: #ff2e2e;
-            transition: 0.3s;
-        }
+section{
+  padding:60px 20px;
+  max-width:1000px;
+  margin:auto
+}
 
-        nav ul li a:hover {
-            color: #ff2e2e;
-        }
+.card{
+  background:rgba(255,255,255,.06);
+  backdrop-filter:blur(12px);
+  padding:30px;
+  border-radius:20px;
+  box-shadow:0 15px 35px rgba(0,0,0,.35)
+}
 
-        nav ul li a:hover::after {
-            width: 100%;
-        }
+.skills span{
+  display:inline-block;
+  margin:8px;
+  padding:10px 16px;
+  border-radius:999px;
+  background:linear-gradient(45deg,var(--primary),var(--accent))
+}
 
-        .logo {
-            font-size: 22px;
-            font-weight: bold;
-            color: #ff2e2e;
-        }
+form{
+  display:flex;
+  flex-direction:column;
+  gap:15px
+}
 
-        /* =========================
-           HERO
-        ========================= */
-        .hero {
-            text-align: center;
-            padding: 140px 20px;
-        }
+input,textarea{
+  padding:14px;
+  border-radius:12px;
+  border:none;
+  outline:none
+}
 
-        .hero h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
-            color: #ff2e2e;
-        }
+button{
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(45deg,var(--secondary),var(--primary));
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+  transition:.3s
+}
 
-        .hero p {
-            max-width: 600px;
-            margin: 0 auto 30px;
-            font-size: 18px;
-            line-height: 1.6;
-        }
+button:hover{
+  transform:scale(1.05)
+}
 
-        /* =========================
-           BUTTONS
-        ========================= */
-        .btn, button {
-            padding: 12px 28px;
-            background: #ff2e2e;
-            color: white;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            transition: 0.3s ease;
-        }
+.status{
+  margin-top:10px;
+  font-weight:600
+}
 
-        .btn:hover, button:hover {
-            background: #b30000;
-            transform: translateY(-2px);
-        }
-
-        /* =========================
-           SECTIONS
-        ========================= */
-        .section {
-            padding: 80px 20px;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.6);
-            margin: 40px 60px;
-            border-radius: 20px;
-            backdrop-filter: blur(8px);
-            transition: 0.3s ease;
-        }
-
-        .section:hover {
-            transform: translateY(-5px);
-        }
-
-        /* =========================
-           FEEDBACK
-        ========================= */
-        #feedback {
-            background: #111;
-        }
-
-        .feedback-form {
-            max-width: 500px;
-            margin: 30px auto 0;
-        }
-
-        .feedback-form input,
-        .feedback-form textarea {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            background: #222;
-            border: 1px solid #333;
-            border-radius: 8px;
-            color: white;
-            font-size: 14px;
-            transition: 0.3s;
-        }
-
-        .feedback-form input:focus,
-        .feedback-form textarea:focus {
-            outline: none;
-            border-color: #00ffd5;
-            box-shadow: 0 0 10px rgba(0, 255, 213, 0.2);
-        }
-
-        .feedback-form button {
-            width: 100%;
-            padding: 12px;
-            background: #00ffd5;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            color: #000;
-            font-size: 16px;
-            transition: 0.3s;
-        }
-
-        .feedback-form button:hover {
-            background: #00e6c3;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 255, 213, 0.4);
-        }
-
-        #status {
-            margin-top: 15px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: 40px;
-            background: rgba(0, 0, 0, 0.8);
-        }
-
-        /* =========================
-           RESPONSIVE
-        ========================= */
-        @media (max-width: 768px) {
-            nav {
-                flex-direction: column;
-            }
-
-            nav ul {
-                margin-top: 15px;
-                gap: 15px;
-            }
-
-            .section {
-                margin: 20px;
-            }
-        }
-    </style>
+footer{
+  text-align:center;
+  padding:30px;
+  opacity:.6
+}
+</style>
 </head>
+
 <body>
 
-    <!-- NAV -->
-    <nav>
-        <h2 class="logo">Jerome Johnson</h2>
-        <ul>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li><a href="#feedback">Feedback</a></li>
-        </ul>
-    </nav>
+<header>
+  <h1>Jerome</h1>
+  <p>BCA Student • Cloud • Web Developer</p>
+</header>
 
-    <!-- HERO -->
-    <section id="about" class="hero">
-        <h1>Hello, I'm Jerome 👋</h1>
-        <p>
-            A passionate Web Developer skilled in HTML, CSS,
-            JavaScript, Node.js & Supabase.
-        </p>
-        <a href="#feedback" class="btn">Send Feedback</a>
-    </section>
+<section>
+  <div class="card">
+    <h2>About Me</h2>
+    <p>
+      Hello! I'm Jerome, passionate about cloud computing and modern web development.
+      I enjoy building responsive and interactive applications connected with real-time databases.
+    </p>
+    <div class="skills">
+      <span>BCA</span>
+      <span>Cloud</span>
+      <span>Web</span>
+    </div>
+  </div>
+</section>
 
-    <!-- CONTACT -->
-    <section id="contact" class="section">
-        <h2>Contact Me</h2>
-        <p>Email: jeromejohnson.abc.123@gmail.com</p>
-        <p>Phone: +91 6238405216</p>
-    </section>
+<section>
+  <div class="card">
+    <h2>Feedback</h2>
+    <form id="feedbackForm">
+      <input type="text" id="name" placeholder="Your Name" required />
+      <input type="email" id="email" placeholder="Your Email" required />
+      <textarea id="message" rows="5" placeholder="Your Message" required></textarea>
+      <button type="submit">Submit</button>
+      <div class="status" id="status"></div>
+    </form>
+  </div>
+</section>
 
-    <!-- FEEDBACK -->
-    <section id="feedback" class="section">
-        <h2>Send Your Feedback</h2>
+<footer>
+  © 2026 Jerome Portfolio
+</footer>
 
-        <form id="feedbackForm" class="feedback-form">
-            <input type="text" id="name" placeholder="Your Name" required>
-            <input type="email" id="email" placeholder="Your Email" required>
-            <textarea id="message" placeholder="Your Feedback" required></textarea>
-            <button type="submit">Submit Feedback</button>
-        </form>
+<script>
+const supabaseUrl = "https://gvtfcwxyejmqxaqazdyc.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd2dGZjd3h5ZWptcXhhcWF6ZHljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwOTE1OTksImV4cCI6MjA4NzY2NzU5OX0.Py5bjITTz8aXEUQbF7lQQ9QN1vQnMjan7NYXv8WBQ5A";
 
-        <p id="status"></p>
-    </section>
+const { createClient } = supabase;
+const supabaseClient = createClient(supabaseUrl, supabaseKey);
 
-    <footer>
-        <p>© 2026 Jerome Johnson | All Rights Reserved</p>
-    </footer>
+const form = document.getElementById("feedbackForm");
+const statusDiv = document.getElementById("status");
 
-    <!-- SUPABASE -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  statusDiv.textContent = "Sending...";
 
-    <script>
-        const supabaseUrl = "https://irnqodbrxwovjprqeyco.supabase.co";
-        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlybnFvZGJyeHdvdmpwcnFleWNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwODg0NjksImV4cCI6MjA4NzY2NDQ2OX0.XuEuqpP5Akz5RlD_8Suc1dgiJ8tHlXCsYmLrhPKCSbk"; // ⚠️ replace with your real anon public key
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const message = document.getElementById("message").value;
 
-        const supabaseClient = supabase.createClient(
-            supabaseUrl,
-            supabaseKey
-        );
+  const { error } = await supabaseClient
+    .from("feedback")
+    .insert([{ name, email, message }]);
 
-        document.getElementById("feedbackForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
-
-            const status = document.getElementById("status");
-            const submitButton = e.target.querySelector('button[type="submit"]');
-
-            status.innerText = "Submitting...";
-            status.style.color = "#fff";
-            submitButton.disabled = true;
-            submitButton.innerText = "Submitting...";
-
-            const name = document.getElementById("name").value.trim();
-            const email = document.getElementById("email").value.trim();
-            const message = document.getElementById("message").value.trim();
-
-            try {
-                const { error } = await supabaseClient
-                    .from("feedback")
-                    .insert([{ name, email, message }]);
-
-                if (error) {
-                    status.innerText = `❌ Error: ${error.message}`;
-                    status.style.color = "#ff4444";
-                } else {
-                    status.innerText = "✅ Feedback submitted successfully!";
-                    status.style.color = "#00ffd5";
-                    e.target.reset();
-
-                    setTimeout(() => {
-                        status.innerText = "";
-                    }, 5000);
-                }
-            } catch (err) {
-                status.innerText = "❌ Unexpected error occurred.";
-                status.style.color = "#ff4444";
-                console.error(err);
-            } finally {
-                submitButton.disabled = false;
-                submitButton.innerText = "Submit Feedback";
-            }
-        });
-    </script>
+  if (error) {
+    statusDiv.style.color = "#f87171";
+    statusDiv.textContent = "Error sending message!";
+  } else {
+    statusDiv.style.color = "#4ade80";
+    statusDiv.textContent = "Message sent successfully!";
+    form.reset();
+  }
+});
+</script>
 
 </body>
 </html>
-
