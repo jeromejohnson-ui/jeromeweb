@@ -4,59 +4,55 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Jerome | Portfolio</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 :root{
-  --primary:#14b8a6;   /* teal */
-  --secondary:#f97316; /* orange */
-  --accent:#22d3ee;    /* cyan */
+  --primary:#14b8a6;
+  --secondary:#f97316;
+  --accent:#22d3ee;
   --dark:#020617;
-  --light:#ecfeff;
 }
 
 *{
-  box-sizing:border-box;
   margin:0;
   padding:0;
-  font-family:'Poppins',sans-serif
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
 }
 
 body{
   background:linear-gradient(135deg,#020617,#042f2e);
-  color:white
+  color:white;
 }
 
 header{
+  text-align:center;
   padding:60px 20px;
-  text-align:center
 }
 
 header h1{
   font-size:3rem;
   background:linear-gradient(45deg,var(--primary),var(--secondary));
   -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent
-}
-
-header p{
-  margin-top:10px;
-  opacity:.85
+  -webkit-text-fill-color:transparent;
 }
 
 section{
-  padding:60px 20px;
-  max-width:1000px;
-  margin:auto
+  max-width:900px;
+  margin:60px auto;
+  padding:0 20px;
 }
 
 .card{
-  background:rgba(255,255,255,.06);
-  backdrop-filter:blur(12px);
+  background:rgba(255,255,255,0.05);
   padding:30px;
   border-radius:20px;
-  box-shadow:0 15px 35px rgba(0,0,0,.35)
+  backdrop-filter:blur(10px);
+  box-shadow:0 15px 35px rgba(0,0,0,.4);
 }
 
 .skills span{
@@ -64,20 +60,20 @@ section{
   margin:8px;
   padding:10px 16px;
   border-radius:999px;
-  background:linear-gradient(45deg,var(--primary),var(--accent))
+  background:linear-gradient(45deg,var(--primary),var(--accent));
 }
 
 form{
   display:flex;
   flex-direction:column;
-  gap:15px
+  gap:15px;
 }
 
 input,textarea{
   padding:14px;
   border-radius:12px;
   border:none;
-  outline:none
+  outline:none;
 }
 
 button{
@@ -88,22 +84,22 @@ button{
   color:white;
   font-weight:600;
   cursor:pointer;
-  transition:.3s
+  transition:.3s;
 }
 
 button:hover{
-  transform:scale(1.05)
+  transform:scale(1.05);
 }
 
 .status{
   margin-top:10px;
-  font-weight:600
+  font-weight:600;
 }
 
 footer{
   text-align:center;
   padding:30px;
-  opacity:.6
+  opacity:.6;
 }
 </style>
 </head>
@@ -148,43 +144,50 @@ footer{
 </footer>
 
 <script>
-const supabaseUrl = "https://irnqodbrxwovjprqeyco.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlybnFvZGJyeHdvdmpwcnFleWNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwODg0NjksImV4cCI6MjA4NzY2NDQ2OX0.XuEuqpP5Akz5RlD_8Suc1dgiJ8tHlXCsYmLrhPKCSbk";
+document.addEventListener("DOMContentLoaded", () => {
 
-const { createClient } = supabase;
-const supabaseClient = createClient(supabaseUrl, supabaseKey);
+  const SUPABASE_URL = "https://irnqodbrxwovjprqeyco.supabase.co";
+  const SUPABASE_ANON_KEY = "YOUR_PUBLIC_ANON_KEY_HERE"; // paste fresh anon key here
 
-const form = document.getElementById("feedbackForm");
-const statusDiv = document.getElementById("status");
+  const { createClient } = supabase;
+  const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  statusDiv.textContent = "Sending...";
+  const form = document.getElementById("feedbackForm");
+  const statusDiv = document.getElementById("status");
 
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
-  const message = document.getElementById("message").value;
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    statusDiv.style.color = "white";
+    statusDiv.textContent = "Sending...";
 
-  const { error } = await supabaseClient
-    .from("feedbacks")
-    .insert([{ name, email, message }]);
-  if (error) {
-  console.error("Supabase Error:", error);   // 👈 this is important
-  statusDiv.style.color = "#f87171";
-  statusDiv.textContent = error.message;     // 👈 show real error
-}
+    try {
 
-  
- else {
-    statusDiv.style.color = "#4ade80";
-    statusDiv.textContent = "Message sent successfully!";
-    form.reset();
-  }
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const message = document.getElementById("message").value;
+
+      const { data, error } = await client
+        .from("feedbacks")
+        .insert([
+          { name: name, email: email, message: message }
+        ]);
+
+      if (error) throw error;
+
+      statusDiv.style.color = "#4ade80";
+      statusDiv.textContent = "Message sent successfully!";
+      form.reset();
+
+    } catch (err) {
+      console.error("Full Error:", err);
+      statusDiv.style.color = "#f87171";
+      statusDiv.textContent = err.message || "Connection error";
+    }
+
+  });
+
 });
 </script>
 
 </body>
 </html>
-
-
-
