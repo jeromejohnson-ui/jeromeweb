@@ -166,7 +166,7 @@ form.addEventListener("submit", async (e) => {
   const message = document.getElementById("message").value;
 
   const { error } = await supabaseClient
-    .from("feedback")
+    .from("feedbacks")
     .insert([{ name, email, message }]);
 
   if (error) {
@@ -182,4 +182,5 @@ form.addEventListener("submit", async (e) => {
 
 </body>
 </html>
+
 
