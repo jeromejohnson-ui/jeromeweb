@@ -168,11 +168,14 @@ form.addEventListener("submit", async (e) => {
   const { error } = await supabaseClient
     .from("feedbacks")
     .insert([{ name, email, message }]);
-
   if (error) {
-    statusDiv.style.color = "#f87171";
-    statusDiv.textContent = "Error sending message!";
-  } else {
+  console.error("Supabase Error:", error);   // 👈 this is important
+  statusDiv.style.color = "#f87171";
+  statusDiv.textContent = error.message;     // 👈 show real error
+}
+
+  
+ else {
     statusDiv.style.color = "#4ade80";
     statusDiv.textContent = "Message sent successfully!";
     form.reset();
@@ -182,5 +185,6 @@ form.addEventListener("submit", async (e) => {
 
 </body>
 </html>
+
 
 
